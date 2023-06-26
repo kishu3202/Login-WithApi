@@ -9,31 +9,34 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var apiUrl =
-      "https://webiipl.in/amritmayamilk/api/DeliveryBoyApiController/login?=amritmayamilk050512";
-  var apiKey = "amritmayamilk050512";
+  var terminal_code = "";
+  var abc = "";
+
+  get http => null;
+
+  main() async {
+    var headers = {'Content-Type': 'text/plain'};
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'http://service.jaslokhospital.net/api/Appservice.svc/authenticateTerminal'));
+    request.body = {
+      "api_key": "JASLOK1324367890",
+      "terminal_code": "$terminal_code"
+    };
+    request.headers.addAll(headers);
+
+    StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  void login(String email, password) async {
-    try {
-      Response response = await post(
-          Uri.parse(
-              'https://webiipl.in/amritmayamilk/api/DeliveryBoyApiController/customerlist'),
-          body: {
-            'email': email,
-            'password': password,
-          });
-      if (response.statusCode == 200) {
-        print('Account created successfylly');
-      } else {
-        print('failed');
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +108,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: IconButton(
                             color: Colors.white,
                             onPressed: () {
-                              login(
-                                emailController.text.toString(),
-                                passwordController.text.toString(),
-                              );
+                              // login(
+                              //   emailController.text.toString(),
+                              //   passwordController.text.toString(),
+                              // );
                             },
                             icon: Icon(Icons.arrow_forward),
                           ),
